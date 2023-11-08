@@ -1,9 +1,9 @@
 import React from 'react';
-import '../components/Auth.css';
+import styles from'./../styles/Auth.module.css';
 
 function Login() {
     return (
-        <div className="auth-container">
+        <div className={styles['auth-container']}>
             <h2>Login</h2>
             <form>
                 <input type="text" placeholder="Username" />
