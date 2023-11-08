@@ -1,0 +1,31 @@
+.button-red{
+    background-color: #FAA0A0;
+}
+
+.button-red:hover{
+    background-color: #A52A2A;
+}
+
+
+.button-green{
+    background-color: #C1E1C1;
+}
+
+.button-green:hover{
+    background-color: #478778;
+}
+
+.button-container button{
+    color: white;
+    padding: 20px;
+    padding-left:20px;
+    padding-right:20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
