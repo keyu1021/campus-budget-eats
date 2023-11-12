@@ -1,0 +1,27 @@
+* {
+    font-family: 'Gupter', serif;
+}
+
+.item-container-center{
+    width:50%;
+    height: 100%;
+    margin: 100px;
+    text-align: center;
+}
+
+.item-container-left{
+    width:50%;
+    height: 100%;
+    margin: 100px;
+    text-align: left;
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.progress-container{
+    width: 50%;
+    margin: 0px auto;
+}
