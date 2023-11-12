@@ -1,20 +1,20 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { GrAddCircle } from 'react-icons/gr';
 
 import PriceSort from './PriceSort';
 import ExpenseData from '../data/ExpenseData';
+import NewExpense from './NewExpense';
 
 import styles from '../../styles/Expenses.module.css';
 
-function Expenses() {
+function Expenses(props) {
+
+  // Data management  
   const [data, setData] = useState(ExpenseData);
 
-  var total = 0;
-  for (let element in data) {
-    total += element.price;
-  }
-
+  // Sorting
   const sortDateMostRecent = () => {
     setData(
       [...data].sort(function (a, b) {
@@ -47,6 +47,40 @@ function Expenses() {
     );
   };
 
+  // Adding new expense
+  const addNewExpense = (newName, newDate, newPrice) => {
+    const newExpense = {
+        name: newName,
+        date: newDate,
+        price: newPrice
+    }
+
+    setData(prevData => [...prevData, newExpense]); // Use the previous state to calculate the new state
+    handleClose();
+
+    var calcTotal = 0;
+    data.forEach((element, index, array) => {
+      calcTotal += element.price;
+    });
+    props.updateTotal(calcTotal);
+  }
+
+  useEffect(() => {
+    // Calculate the total based on the updated data
+    var calcTotal = 0;
+    data.forEach((element, index, array) => {
+        console.log(element.price)
+      calcTotal += element.price;
+    });
+    props.updateTotal(calcTotal);
+  }, [data, props]);
+
+  // Modal management
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <React.Fragment>
       <PriceSort
@@ -55,13 +89,15 @@ function Expenses() {
         sortPriceHighest={sortPriceHighest}
         sortPriceLowest={sortPriceLowest}
       />
+      <GrAddCircle onClick={handleShow}/>
+      <NewExpense show={show} handleClose={handleClose} handleShow={handleShow} addNewExpense={addNewExpense}/>
       <div className={styles['table-container']}>
         <Table>
           <thead>
             <tr>
               <th>Expense</th>
               <th>Date</th>
-              <th>Price</th>
+              <th>Price ($)</th>
             </tr>
           </thead>
           <tbody>
