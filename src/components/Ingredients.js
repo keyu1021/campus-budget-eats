@@ -1,6 +1,7 @@
 import React from "react";
-import "../styles/Ingredients.css";
+import styles from "../styles/Ingredients.module.css";
 import Navigation from "./assets/Navigation";
+//import "../styles/Ingredients.css";
 
 const ingredientsData = [
   {
@@ -69,25 +70,25 @@ const ingredientsData = [
 ];
 
 const Ingredient = ({ name, price, unit, icon }) => (
-  <div className="ingredient">
-    <img src={icon} className="ingredient-icon" />
-    <div className="ingredient-name">{name}</div>
-    <div className="ingredient-price">
+  <div className={styles.ingredient}>
+    <img src={icon} className={styles.ingredientIcon} />
+    <div className={styles.ingredientName}>{name}</div>
+    <div className={styles.ingredientPrice}>
       ${price}/{unit}
     </div>
   </div>
 );
 
-// The list component for Ingredients
 const Ingredients = () => {
   return (
-    <div className="ingredients-page">
+    <div className={styles.ingredientsPage}>
       <Navigation />
-      <h1 className="ingredients-header">Your Weekly Grocery Picks</h1>
-      <button className="turn-recipes-btn">Turn into Recipes</button>
-      <div className="ingredients-container">
-        {ingredientsData.map((ingredient) => (
+      <h1 className={styles.ingredientsHeader}>Your Weekly Grocery Picks</h1>
+      <button className={styles.turnRecipesBtn}>Turn into Recipes</button>
+      <div className={styles.ingredientsContainer}>
+        {ingredientsData.map((ingredient, index) => (
           <Ingredient
+            key={index} // It's important to provide a unique key for list items
             name={ingredient.name}
             price={ingredient.price}
             unit={ingredient.unit}
