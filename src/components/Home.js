@@ -9,22 +9,30 @@ import styles from '../styles/Home.module.css';
 import ExpenseData from './data/ExpenseData';
 
 function Home() {
-  var calcTotal = 0;
-  ExpenseData.forEach((element, index, array) => {
-    calcTotal += element.price;
-  });
+  const [total, setTotal] = useState(0);
+  const [budget, setBudget] = useState(0);
+  const [remaining, setRemaining] = useState(0);
+  const [percentage, setPercentage] = useState(0);
 
-  const [total, setTotal] = useState(calcTotal);
+  useEffect(() => {
+    //Load the budget from localstorage
+    setBudget(localStorage.getItem('budget'));
 
-  const [budget, setBudget] = useState(350);
-  const [remaining, setRemaining] = useState(budget - total);
-  const [percentage, setPercentage] = useState(
-    Math.round(((budget - remaining) / budget) * 100)
-  );
+    //Calculate initial total
+    var calcTotal = 0;
+    ExpenseData.forEach((element, index, array) => {
+      calcTotal += element.price;
+    });
+
+    //Set initial values
+    setRemaining(budget - total);
+    setPercentage(((budget - remaining) / budget) * 100);
+
+  }, []);
 
   const updateTotal = (newTotal) => {
-    setTotal(newTotal)
-  }
+    setTotal(newTotal);
+  };
 
   // State to store the debounced value of the budget
   const [debouncedBudget, setDebouncedBudget] = useState(budget);
@@ -54,13 +62,12 @@ function Home() {
     const value = event.target.value;
     setBudget(value);
     debouncedHandleBudgetChange(value);
+    localStorage.setItem('budget', value)
   };
 
   useEffect(() => {
-    setRemaining(budget - total)
-  }, [total, budget]
-
-  )
+    setRemaining(budget - total);
+  }, [total, budget]);
 
   return (
     <React.Fragment>
@@ -83,7 +90,7 @@ function Home() {
         </div>
         <div className={styles['item-container-left']}>
           <h3>Monthly expenses</h3>
-          <Expenses updateTotal={updateTotal}/>
+          <Expenses updateTotal={updateTotal} />
           <h3>Total: {total}$</h3>
         </div>
       </div>

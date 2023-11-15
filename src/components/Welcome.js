@@ -10,7 +10,6 @@ function Welcome() {
             <h3>Welcome !</h3>
             <Link to='/register'><Button colorStyle='button-red' text='Sign Up'/></Link>
             <Link to='/login'><Button colorStyle='button-green' text='Log In'/></Link>
-
             <Outlet />
         </div>
     )
