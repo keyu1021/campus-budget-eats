@@ -10,8 +10,7 @@ import NewExpense from './NewExpense';
 import styles from '../../styles/Expenses.module.css';
 
 function Expenses(props) {
-
-  // Data management  
+  // Data management
   const [data, setData] = useState(ExpenseData);
 
   // Sorting
@@ -50,12 +49,12 @@ function Expenses(props) {
   // Adding new expense
   const addNewExpense = (newName, newDate, newPrice) => {
     const newExpense = {
-        name: newName,
-        date: newDate,
-        price: newPrice
-    }
+      name: newName,
+      date: newDate,
+      price: newPrice,
+    };
 
-    setData(prevData => [...prevData, newExpense]); // Use the previous state to calculate the new state
+    setData((prevData) => [...prevData, newExpense]); // Use the previous state to calculate the new state
     handleClose();
 
     var calcTotal = 0;
@@ -63,13 +62,12 @@ function Expenses(props) {
       calcTotal += element.price;
     });
     props.updateTotal(calcTotal);
-  }
+  };
 
   useEffect(() => {
     // Calculate the total based on the updated data
     var calcTotal = 0;
     data.forEach((element, index, array) => {
-        console.log(element.price)
       calcTotal += element.price;
     });
     props.updateTotal(calcTotal);
@@ -89,8 +87,13 @@ function Expenses(props) {
         sortPriceHighest={sortPriceHighest}
         sortPriceLowest={sortPriceLowest}
       />
-      <GrAddCircle onClick={handleShow}/>
-      <NewExpense show={show} handleClose={handleClose} handleShow={handleShow} addNewExpense={addNewExpense}/>
+      <GrAddCircle onClick={handleShow} />
+      <NewExpense
+        show={show}
+        handleClose={handleClose}
+        handleShow={handleShow}
+        addNewExpense={addNewExpense}
+      />
       <div className={styles['table-container']}>
         <Table>
           <thead>

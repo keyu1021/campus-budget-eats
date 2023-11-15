@@ -1,17 +1,44 @@
-import React from 'react';
-import styles from'./../styles/Auth.module.css';
+import React, {useState} from 'react';
+
+import { LinkContainer } from 'react-router-bootstrap';
+
+import styles from './../styles/Auth.module.css';
 
 function Login() {
-    return (
-        <div className={styles['auth-container']}>
-            <h2>Login</h2>
-            <form>
-                <input type="text" placeholder="Username" />
-                <input type="password" placeholder="Password" />
-                <button type="submit">Login</button>
-            </form>
-        </div>
-    );
+  const [inputUsername, setInputUsername] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+
+  const handleLogin = (e) => {
+    localStorage.setItem('username', inputUsername);
+    localStorage.setItem('password', inputPassword);
+    setInputUsername('');
+    setInputPassword('');
+  };
+
+  return (
+    <div className={styles['auth-container']}>
+      <h2>Login</h2>
+      <form>
+        <input
+          type='text'
+          placeholder='Username'
+          value={inputUsername}
+          onChange={(e) => setInputUsername(e.target.value)}
+        />
+        <input
+          type='password'
+          placeholder='Password'
+          value={inputPassword}
+          onChange={(e) => setInputPassword(e.target.value)}
+        />
+        <LinkContainer to='/home'>
+          <button type='submit' onClick={handleLogin}>
+            Login
+          </button>
+        </LinkContainer>
+      </form>
+    </div>
+  );
 }
 
 export default Login;
