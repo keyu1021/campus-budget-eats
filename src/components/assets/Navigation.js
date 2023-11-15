@@ -8,20 +8,20 @@ function Navigation() {
   return (
     <Navbar bg='light' data-bs-theme='light'>
       <Container>
-        
         <LinkContainer to='/home'>
-          <Navbar.Brand href='#home'>Home</Navbar.Brand>
+          <Navbar.Brand>Home</Navbar.Brand>
         </LinkContainer>
 
         <Nav className='me-auto'>
-          <Nav.Link>Ingredients</Nav.Link>
+          <LinkContainer to='/ingredients'>
+            <Nav.Link>Ingredients</Nav.Link>
+          </LinkContainer>
           <Nav.Link>Find a recipe</Nav.Link>
           <Nav.Link>Favorites</Nav.Link>
 
           <LinkContainer to='/account'>
             <Nav.Link>Account</Nav.Link>
           </LinkContainer>
-
         </Nav>
       </Container>
     </Navbar>
