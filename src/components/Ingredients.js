@@ -81,22 +81,24 @@ const Ingredient = ({ name, price, unit, icon }) => (
 
 const Ingredients = () => {
   return (
-    <div className={styles.ingredientsPage}>
+    <React.Fragment>
       <Navigation />
-      <h1 className={styles.ingredientsHeader}>Your Weekly Grocery Picks</h1>
-      <button className={styles.turnRecipesBtn}>Turn into Recipes</button>
-      <div className={styles.ingredientsContainer}>
-        {ingredientsData.map((ingredient, index) => (
-          <Ingredient
-            key={index} // It's important to provide a unique key for list items
-            name={ingredient.name}
-            price={ingredient.price}
-            unit={ingredient.unit}
-            icon={ingredient.icon}
-          />
-        ))}
+      <div className={styles.ingredientsPage}>
+        <h1 className={styles.ingredientsHeader}>Your Weekly Grocery Picks</h1>
+        <button className={styles.turnRecipesBtn}>Turn into Recipes</button>
+        <div className={styles.ingredientsContainer}>
+          {ingredientsData.map((ingredient, index) => (
+            <Ingredient
+              key={index} // It's important to provide a unique key for list items
+              name={ingredient.name}
+              price={ingredient.price}
+              unit={ingredient.unit}
+              icon={ingredient.icon}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
