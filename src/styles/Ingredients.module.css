@@ -1,0 +1,66 @@
+.ingredientsPage {
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+.ingredientsHeader {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.ingredientsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
+  gap: 20px; /* Space between cards */
+  justify-items: center; /* Center cards horizontally */
+}
+
+.ingredient {
+  border: 1px #ddd;
+  border-radius: 10px; /* Rounded corners */
+  padding: 10px;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Simple box shadow for depth */
+  text-align: center; /* Centering text */
+  transition: transform 0.2s; /* Animation on hover */
+}
+
+.ingredient:hover {
+  transform: translateY(-5px); /* Slight raise effect on hover */
+}
+
+.ingredientIcon {
+  max-width: 50px; /* Maximum width for the icon */
+  height: auto; /* Maintain aspect ratio */
+  margin-bottom: 10px; /* Space between icon and text */
+}
+
+.ingredientName {
+  font-weight: bold;
+  margin-bottom: 5px; /* Space between name and price */
+}
+
+.ingredientPrice {
+  color: #555;
+  font-size: 0.9em;
+}
+
+.turnRecipesBtn {
+  display: block;
+  width: max-content;
+  padding: 10px 20px;
+  margin: 30px auto; /* Center button horizontally */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase; /* Uppercase text for the button */
+  font-weight: bold;
+  text-decoration: none;
+  background-color: lightgrey; /* Blue */
+}
+
+.turnRecipesBtn:hover {
+  background-color: lightblue; /* Darker blue on hover */
+}

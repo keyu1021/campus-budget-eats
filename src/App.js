@@ -7,6 +7,7 @@ import Welcome from './components/Welcome';
 import Home from './components/Home';
 import Account from './components/Account';
 import Ingredients from "./components/Ingredients";
+import FindRecipe from "./components/FindRecipe";
 
 function App() {
   useEffect(() => {
@@ -40,6 +41,7 @@ function App() {
         <Route path='/home' element={<Home />} />
         <Route path='/account' element={<Account />} />
         <Route path="/ingredients" element={<Ingredients />} />
+        <Route path="/findrecipe" element={<FindRecipe />} />
       </Routes>
     </BrowserRouter>
   );
