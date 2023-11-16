@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { Row, Col } from 'react-bootstrap';
 
 import Navigation from './assets/Navigation';
 import Form from 'react-bootstrap/Form';
@@ -27,7 +28,6 @@ function Home() {
     //Set initial values
     setRemaining(budget - total);
     setPercentage(((budget - remaining) / budget) * 100);
-
   }, []);
 
   const updateTotal = (newTotal) => {
@@ -62,7 +62,7 @@ function Home() {
     const value = event.target.value;
     setBudget(value);
     debouncedHandleBudgetChange(value);
-    localStorage.setItem('budget', value)
+    localStorage.setItem('budget', value);
   };
 
   useEffect(() => {
@@ -74,24 +74,31 @@ function Home() {
       <Navigation />
       <div className={styles['flex-container']}>
         <div className={styles['item-container-center']}>
-          <h3>October's food budget : </h3>
-          <Form.Control
-            type='number'
-            className='w-25'
-            value={budget}
-            onChange={handleBudgetChange}
-          />
+          <Row className='mb-3 justify-content-center'>
+            <Col lg={7} className="text-center">
+              <h3>October's food budget : </h3>
+            </Col>
+            <Col lg={3} className="text-center">
+              <Form.Control
+                type='number'
+                value={budget}
+                onChange={handleBudgetChange}
+              />
+            </Col>
+          </Row>
+
           <div className={styles['progress-container']}>
             <CircularProgressbar value={percentage} text={`${percentage}%`} />
           </div>
-          <h3>
+
+          <h3 className='mt-3'>
             {remaining}$ of {budget}$ remaining
           </h3>
         </div>
+
         <div className={styles['item-container-left']}>
-          <h3>Monthly expenses</h3>
           <Expenses updateTotal={updateTotal} />
-          <h3>Total: {total}$</h3>
+          <h3 className='mt-2'>Total: {total}$</h3>
         </div>
       </div>
     </React.Fragment>

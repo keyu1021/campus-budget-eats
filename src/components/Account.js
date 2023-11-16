@@ -92,7 +92,7 @@ function Account() {
     <React.Fragment>
       <Navigation />
       <Container>
-        <Row>
+        <Row className='mt-5'>
           <Col lg={3}>
             <Image
               src={accountLogo}
@@ -119,7 +119,7 @@ function Account() {
           </Col>
         </Row>
 
-        <Row>
+        <Row className='mt-3'>
           <Col lg={12}>
             <Form.Label>Dietary restrictions:</Form.Label>
           </Col>
