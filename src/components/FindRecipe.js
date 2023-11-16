@@ -120,12 +120,33 @@ function FindRecipe() {
 
   const toggleFavorite = (recipeName) => {
     setFavorites((prevFavorites) => {
-      const updatedFavorites = new Set(prevFavorites);
-      if (updatedFavorites.has(recipeName)) {
-        updatedFavorites.delete(recipeName);
+      // Check if the recipe is already favorited
+      const isFavorited = Array.from(prevFavorites).some(
+        (favRecipe) => favRecipe.name === recipeName
+      );
+
+      let updatedFavorites;
+      if (isFavorited) {
+        // If it's favorited, create a new set without this recipe
+        updatedFavorites = new Set(
+          Array.from(prevFavorites).filter(
+            (favRecipe) => favRecipe.name !== recipeName
+          )
+        );
       } else {
-        updatedFavorites.add(recipeName);
+        // If it's not favorited, create a new set with this recipe added
+        const recipeToAdd = recipes.find(
+          (recipe) => recipe.name === recipeName
+        );
+        updatedFavorites = new Set([...Array.from(prevFavorites), recipeToAdd]);
       }
+
+      // Update localStorage
+      localStorage.setItem(
+        "favorites",
+        JSON.stringify(Array.from(updatedFavorites))
+      );
+
       return updatedFavorites;
     });
   };
@@ -171,7 +192,11 @@ function FindRecipe() {
                 className={styles.favoriteButton}
                 onClick={() => toggleFavorite(recipe.name)}
               >
-                {favorites.has(recipe.name) ? "♥" : "♡"}
+                {Array.from(favorites).some(
+                  (favRecipe) => favRecipe.name === recipe.name
+                )
+                  ? "♥"
+                  : "♡"}
               </button>
             </li>
           ))}
