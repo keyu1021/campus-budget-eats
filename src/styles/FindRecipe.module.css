@@ -1,0 +1,106 @@
+.searchBar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.searchInput {
+  flex-grow: 1;
+  padding: 8px 16px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.filterDropdown {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.container {
+  padding: 16px;
+  display: flex;
+}
+
+.recipeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.recipeItem {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 16px;
+  padding: 16px;
+  width: 300px; /* Adjust as needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recipeImage {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.recipePrice {
+  color: #888;
+  font-weight: bold;
+}
+
+/* Existing styles... */
+
+.blurred {
+  filter: blur(4px);
+}
+
+.recipeItem {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.recipeItem:hover {
+  transform: scale(1.05);
+}
+
+.selected {
+  transform: scale(1.1);
+  position: relative;
+  z-index: 2;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recipeDetails {
+  display: none;
+}
+
+.selected .recipeDetails {
+  display: block;
+  /* Additional styles for full recipe details */
+}
+
+.favoriteButton {
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.favoritebutton:hover {
+  color: #f00;
+}
+
+.recipeInfo {
+  position: relative;
+}

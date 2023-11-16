@@ -5,21 +5,21 @@ import Navigation from "./assets/Navigation";
 
 const ingredientsData = [
   {
-    category: "Meat",
+    category: "Protein",
     name: "Chicken",
     price: "9.99",
     unit: "lb",
     icon: "./icons/chicken.png",
   },
   {
-    category: "Meat",
+    category: "Protein",
     name: "Short Ribs",
     price: "12.59",
     unit: "lb",
     icon: "./icons/ribs.png",
   },
   {
-    category: "Meat",
+    category: "Protein",
     name: "Steak",
     price: "14.59",
     unit: "lb",
@@ -66,6 +66,48 @@ const ingredientsData = [
     price: "2.50",
     unit: "ea",
     icon: "./icons/bread.png",
+  },
+  {
+    category: "Protein",
+    name: "Egg",
+    price: "3.99",
+    unit: "ea",
+    icon: "./icons/egg.png",
+  },
+  {
+    category: "Protein",
+    name: "Tofu",
+    price: "1.99",
+    unit: "ea",
+    icon: "./icons/tofu.png",
+  },
+  {
+    category: "Vegetables",
+    name: "Onion",
+    price: "2.49",
+    unit: "lb",
+    icon: "./icons/onion.png",
+  },
+  {
+    category: "Vegetables",
+    name: "Cherry Tomato",
+    price: "4.49",
+    unit: "lb",
+    icon: "./icons/cherrytomato.png",
+  },
+  {
+    category: "Protein",
+    name: "Bacon",
+    price: "4.49",
+    unit: "lb",
+    icon: "./icons/bacon.png",
+  },
+  {
+    category: "Protein",
+    name: "Cheese",
+    price: "7.49",
+    unit: "ea",
+    icon: "./icons/cheese.png",
   },
 ];
 
