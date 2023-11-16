@@ -1,7 +1,10 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import { Row, Col } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
+import { IconContext } from 'react-icons';
+import { GrSubtractCircle } from 'react-icons/gr';
 
 import PriceSort from './PriceSort';
 import ExpenseData from '../data/ExpenseData';
@@ -81,21 +84,33 @@ function Expenses(props) {
 
   return (
     <React.Fragment>
-      <PriceSort
-        sortDateMostRecent={sortDateMostRecent}
-        sortDateOldest={sortDateOldest}
-        sortPriceHighest={sortPriceHighest}
-        sortPriceLowest={sortPriceLowest}
-      />
-      <GrAddCircle onClick={handleShow} />
-      <NewExpense
-        show={show}
-        handleClose={handleClose}
-        handleShow={handleShow}
-        addNewExpense={addNewExpense}
-      />
+      <Row className='d-flex align-items-center mb-3'>
+        <Col>
+          <h3>Monthly expenses</h3>
+        </Col>
+        <Col lg={2}>
+          <PriceSort
+            sortDateMostRecent={sortDateMostRecent}
+            sortDateOldest={sortDateOldest}
+            sortPriceHighest={sortPriceHighest}
+            sortPriceLowest={sortPriceLowest}
+          />
+        </Col>
+        <Col lg={1}>
+          <IconContext.Provider value={{ style: { cursor: 'pointer' } }}>
+            <GrAddCircle onClick={handleShow} />
+          </IconContext.Provider>
+        </Col>
+        <NewExpense
+          show={show}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          addNewExpense={addNewExpense}
+        />
+      </Row>
+
       <div className={styles['table-container']}>
-        <Table>
+        <Table className='mt-1' bordered>
           <thead>
             <tr>
               <th>Expense</th>
@@ -109,7 +124,16 @@ function Expenses(props) {
                 <tr key={key}>
                   <td>{val.name}</td>
                   <td>{val.date}</td>
-                  <td>{val.price}</td>
+                  <td>
+                    {val.price}{' '}
+                    <IconContext.Provider
+                      value={{
+                        style: { cursor: 'pointer', visibility: 'hidden' },
+                      }}
+                    >
+                      <GrSubtractCircle />
+                    </IconContext.Provider>
+                  </td>
                 </tr>
               );
             })}

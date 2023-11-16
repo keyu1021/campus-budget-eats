@@ -1,19 +1,33 @@
 import React from 'react';
-import { Outlet, Link } from "react-router-dom";
+import { LinkContainer } from 'react-router-bootstrap';
 
-import Button from './assets/Button'
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+
+import styles from './../styles/Welcome.module.css';
 
 function Welcome() {
-    return (
-        <div>
-            <h1>Student Budgeting for balanced meals</h1>
-            <h3>Welcome !</h3>
-            <Link to='/register'><Button colorStyle='button-red' text='Sign Up'/></Link>
-            <Link to='/login'><Button colorStyle='button-green' text='Log In'/></Link>
-            <Outlet />
-        </div>
-    )
+  return (
+    <Container
+      className='d-flex flex-column justify-content-center align-items-center'
+      style={{ height: '100vh' }}
+    >
+      <h1>Student Budgeting for balanced meals</h1>
+      <h3>Welcome !</h3>
+      <div className='d-flex'>
+        <LinkContainer to='/register'>
+          <Button variant='primary' className="me-2">
+            Register
+          </Button>
+        </LinkContainer>
+        <LinkContainer to='/login'>
+          <Button variant='secondary'>
+            Log In
+          </Button>
+        </LinkContainer>
+      </div>
+    </Container>
+  );
 }
 
 export default Welcome;
-
