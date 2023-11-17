@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "../styles/Ingredients.module.css";
 import Navigation from "./assets/Navigation";
+import { useNavigate } from "react-router-dom";
+
 //import "../styles/Ingredients.css";
 
 const ingredientsData = [
@@ -122,12 +124,20 @@ const Ingredient = ({ name, price, unit, icon }) => (
 );
 
 const Ingredients = () => {
+  const navigate = useNavigate();
+
+  const goToFindRecipe = () => {
+    navigate("/findrecipe"); // Navigate to the FindRecipe route
+  };
+
   return (
     <React.Fragment>
       <Navigation />
       <div className={styles.ingredientsPage}>
         <h1 className={styles.ingredientsHeader}>Your Weekly Grocery Picks</h1>
-        <button className={styles.turnRecipesBtn}>Turn into Recipes</button>
+        <button className={styles.turnRecipesBtn} onClick={goToFindRecipe}>
+          Turn into Recipes
+        </button>
         <div className={styles.ingredientsContainer}>
           {ingredientsData.map((ingredient, index) => (
             <Ingredient

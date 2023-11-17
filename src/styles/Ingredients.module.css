@@ -58,9 +58,9 @@
   text-transform: uppercase; /* Uppercase text for the button */
   font-weight: bold;
   text-decoration: none;
-  background-color: lightgrey; /* Blue */
+  background-color: rgb(214, 214, 214); /* Blue */
 }
 
 .turnRecipesBtn:hover {
-  background-color: lightblue; /* Darker blue on hover */
+  background-color: rgb(186, 186, 186); /* Darker blue on hover */
 }
