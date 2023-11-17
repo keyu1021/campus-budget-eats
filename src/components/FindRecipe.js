@@ -216,7 +216,7 @@ function FindRecipe() {
                   className={styles.openButton}
                   onClick={() => openModal(recipe)}
                 >
-                  See Recipe
+                  See the Recipe
                 </button>
               </div>
             </li>

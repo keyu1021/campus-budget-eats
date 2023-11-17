@@ -52,16 +52,32 @@ const Favorites = () => {
               <p className={styles.recipePrice}>
                 Estimated Price: ${recipe.price}
               </p>
-              <button
-                className={styles.removeButton}
-                onClick={() => removeFavorite(recipe.name)}
-              >
-                Remove
-              </button>
+              <div className={styles.buttonContainer}>
+                <button
+                  className={styles.removeButton}
+                  onClick={() => removeFavorite(recipe.name)}
+                >
+                  Remove
+                </button>
+
+                <button
+                  className={styles.openButton}
+                  onClick={() => openModal(recipe)}
+                >
+                  See the Recipe
+                </button>
+              </div>
             </li>
           ))}
         </ul>
       </div>
+      {selectedRecipe && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          recipe={selectedRecipe}
+        />
+      )}
     </>
   );
 };
