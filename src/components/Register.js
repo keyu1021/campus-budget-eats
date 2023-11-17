@@ -19,7 +19,7 @@ function Register() {
 
   return (
     <div className={styles['auth-container']}>
-      <h2>Login</h2>
+      <h2>Register</h2>
       <form>
         <input
           type='text'
