@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../styles/Favorites.module.css";
 import Navigation from "./assets/Navigation";
+import Modal from "./assets/Modal";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -16,6 +17,19 @@ const Favorites = () => {
     );
     setFavorites(updatedFavorites);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  const openModal = (recipe) => {
+    setSelectedRecipe(recipe); // Set the clicked recipe as the selected recipe
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedRecipe(null); // Reset the selected recipe
   };
 
   return (

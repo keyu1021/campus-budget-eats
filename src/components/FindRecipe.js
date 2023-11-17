@@ -2,10 +2,9 @@ import React from "react";
 import styles from "../styles/FindRecipe.module.css";
 import { useState } from "react";
 import Navigation from "./assets/Navigation";
+import Modal from "./assets/Modal";
 
 const recipes = [
-  // ... other recipes ...
-
   {
     name: "Beef Stir Fry",
     type: "Meat",
@@ -103,6 +102,8 @@ function FindRecipe() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("");
   const [favorites, setFavorites] = useState(new Set()); // Using a Set for favorites
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // State to track the selected recipe
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -150,6 +151,15 @@ function FindRecipe() {
       return updatedFavorites;
     });
   };
+  const openModal = (recipe) => {
+    setSelectedRecipe(recipe); // Set the clicked recipe as the selected recipe
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedRecipe(null); // Reset the selected recipe
+  };
 
   return (
     <>
@@ -184,24 +194,43 @@ function FindRecipe() {
                 className={styles.recipeImage}
               />
               <h2>{recipe.name}</h2>
-              <p>Ingredients: {recipe.ingredients.join(", ")}</p>
+              {/* <p>Ingredients: {recipe.ingredients.join(", ")}</p> */}
+              <p>Type: {recipe.type}</p>
               <p className={styles.recipePrice}>
                 Estimated Price: ${recipe.price}
               </p>
-              <button
-                className={styles.favoriteButton}
-                onClick={() => toggleFavorite(recipe.name)}
-              >
-                {Array.from(favorites).some(
-                  (favRecipe) => favRecipe.name === recipe.name
-                )
-                  ? "♥"
-                  : "♡"}
-              </button>
+
+              <div className={styles.buttonContainer}>
+                <button
+                  className={styles.favoriteButton}
+                  onClick={() => toggleFavorite(recipe.name)}
+                >
+                  {Array.from(favorites).some(
+                    (favRecipe) => favRecipe.name === recipe.name
+                  )
+                    ? "♥"
+                    : "♡"}
+                </button>
+
+                <button
+                  className={styles.openButton}
+                  onClick={() => openModal(recipe)}
+                >
+                  See Recipe
+                </button>
+              </div>
             </li>
           ))}
         </ul>
       </div>
+
+      {selectedRecipe && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          recipe={selectedRecipe}
+        />
+      )}
     </>
   );
 }
