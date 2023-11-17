@@ -6,7 +6,10 @@
 .favoritesList {
   list-style: none;
   padding: 0;
+  margin: 0;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .favoriteItem {
@@ -16,11 +19,6 @@
   padding: 16px;
   width: 300px; /* Adjust as needed */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.favoriteItem h2 {
-  margin: 0 0 10px 0;
-  color: #333;
 }
 
 .favoriteItem p {
@@ -37,4 +35,21 @@
   right: 10px;
   color: #333;
   font-size: small;
+}
+
+.openButton {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  top: 10px;
+  right: 10px;
+  color: #333;
+  font-size: small;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
