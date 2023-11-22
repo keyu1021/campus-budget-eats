@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { doc, getDoc, updateDoc } from '@firebase/firestore';
 
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -8,8 +9,10 @@ import Form from 'react-bootstrap/Form';
 
 import Navigation from './assets/Navigation';
 import accountLogo from '../images/account-logo.png';
+import { db } from '../firebase';
 
 function Account() {
+  const [document, setDocument] = useState(localStorage.getItem('userID'));
   const [username, setUsername] = useState('');
   const [groceryStore, setGroceryStore] = useState('');
   const [otherRestrictions, setOtherRestrictions] = useState('');
@@ -23,69 +26,153 @@ function Account() {
   const [isHalal, setIsHalal] = useState(false);
 
   useEffect(() => {
-    // Load data from local storage
-    setUsername(localStorage.getItem('username'));
-    setGroceryStore(localStorage.getItem('groceryStore'));
-    setOtherRestrictions(localStorage.getItem('otherRestrictions'));
-    setIsVegetarian(localStorage.getItem('isVegetarian') === 'true');
-    setIsPescatarian(localStorage.getItem('isPescatarian') === 'true');
-    setIsVegan(localStorage.getItem('isVegan') === 'true');
-    setIsGlutenFree(localStorage.getItem('isGlutenFree') === 'true');
-    setIsLactoseFree(localStorage.getItem('isLactoseFree') === 'true');
-    setIsKeto(localStorage.getItem('isKeto') === 'true');
-    setIsKosher(localStorage.getItem('isKosher') === 'true');
-    setIsHalal(localStorage.getItem('isHalal') === 'true');
-    console.log('Loaded from localStorage:', otherRestrictions);
+    //Load data from database
+    const fetchData = async () => {
+      try {
+        //Basic data
+        const docRef = doc(db, 'users', document);
+        const docSnap = await getDoc(docRef);
+        setUsername(docSnap.data().username);
+        setGroceryStore(docSnap.data().groceryStore);
+        setOtherRestrictions(docSnap.data().otherRestrictions);
+
+        //Preferences
+        const docRefPreferences = doc(db, 'userPreferences', document);
+        const docSnapPreferences = await getDoc(docRefPreferences);
+        setIsVegetarian(docSnapPreferences.data().isVegetarian);
+        setIsPescatarian(docSnapPreferences.data().isPescatarian);
+        setIsVegan(docSnapPreferences.data().isVegan);
+        setIsGlutenFree(docSnapPreferences.data().isGlutenFree);
+        setIsLactoseFree(docSnapPreferences.data().isLactoseFree);
+        setIsKeto(docSnapPreferences.data().isKeto);
+        setIsKosher(docSnapPreferences.data().isKosher);
+        setIsHalal(docSnapPreferences.data().isHalal);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const handleOtherRestrictionChange = (e) => {
+  const handleOtherRestrictionChange = async (e) => {
     setOtherRestrictions(e.target.value);
-    localStorage.setItem('otherRestrictions', e.target.value);
+    const updateField = 'otherRestrictions';
+    const newValue = e.target.value;
+    try{
+      const docRef = doc(db, 'users', document);
+      await updateDoc(docRef, {[updateField]: newValue})
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleGroceryStoreChange = (e) => {
+  const handleGroceryStoreChange = async (e) => {
     setGroceryStore(e.target.value);
-    localStorage.setItem('groceryStore', e.target.value);
-  }
+    const updateField = 'groceryStore';
+    const newValue = e.target.value;
+    try{
+      const docRef = doc(db, 'users', document);
+      await updateDoc(docRef, {[updateField]: newValue})
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const handleIsVegetarianChange = (e) => {
+  const handleIsVegetarianChange = async (e) => {
     setIsVegetarian(e.target.checked);
-    localStorage.setItem('isVegetarian', e.target.checked);
+    const updateField = 'isVegetarian';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleIsPescatarianChange = (e) => {
+  const handleIsPescatarianChange = async (e) => {
     setIsPescatarian(e.target.checked);
-    localStorage.setItem('isPescatarian', e.target.checked);
+    const updateField = 'isPescatarian';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleIsVeganChange = (e) => {
+  const handleIsVeganChange = async (e) => {
     setIsVegan(e.target.checked);
-    localStorage.setItem('isVegan', e.target.checked);
+    const updateField = 'isVegan';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleIsGlutenFreeChange = (e) => {
+  const handleIsGlutenFreeChange = async (e) => {
     setIsGlutenFree(e.target.checked);
-    localStorage.setItem('isGlutenFree', e.target.checked);
+    const updateField = 'isGlutenFree';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleIsLactoseFreeChange = (e) => {
+  const handleIsLactoseFreeChange = async (e) => {
     setIsLactoseFree(e.target.checked);
-    localStorage.setItem('isLactoseFree', e.target.checked);
+    const updateField = 'isLactoseFree';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleIsKetoChange = (e) => {
+  const handleIsKetoChange = async (e) => {
     setIsKeto(e.target.checked);
-    localStorage.setItem('isKeto', e.target.checked);
+    const updateField = 'isKeto';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleIsKosherChange = (e) => {
+  const handleIsKosherChange = async (e) => {
     setIsKosher(e.target.checked);
-    localStorage.setItem('isKosher', e.target.checked);
+    const updateField = 'isKosher';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleIsHalalChange = (e) => {
+  const handleIsHalalChange = async (e) => {
     setIsHalal(e.target.checked);
-    localStorage.setItem('isHalal', e.target.checked);
+    const updateField = 'isHalal';
+    const newValue = e.target.checked;
+    try {
+      const docRefPreferences = doc(db, 'userPreferences', document);
+      await updateDoc(docRefPreferences, { [updateField]: newValue });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -173,7 +260,7 @@ function Account() {
                 inline
                 label='Halal'
                 checked={isHalal}
-                onChange={handleIsGlutenFreeChange}
+                onChange={handleIsHalalChange}
               />
             </Form>
           </Col>

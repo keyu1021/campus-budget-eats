@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { db } from '../firebase';
 import { collection, getDocs } from '@firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+
+import { db } from '../firebase';
 
 import styles from './../styles/Auth.module.css';
 

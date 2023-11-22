@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { db } from '../firebase';
-import { addDoc, collection, getDocs } from '@firebase/firestore';
+import { doc, addDoc, setDoc, collection, getDocs } from '@firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './../styles/Auth.module.css';
+import ExpenseData from './data/ExpenseData';
+import Preferences from './data/Preferences';
 
 function Register() {
   const [inputUsername, setInputUsername] = useState('');
@@ -14,12 +16,27 @@ function Register() {
   const collectionRef = collection(db, 'users');
   const navigate = useNavigate();
 
+  const initalizeUserData = async (document) => {
+    try {
+      const docRefExpenses = doc(db, "userExpenses", document)
+      await setDoc(docRefExpenses, ExpenseData)
+      const docRefPreferences = doc(db, "userPreferences", document)
+      await setDoc(docRefPreferences, Preferences)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
     let data = {
       username: inputUsername,
       password: inputPassword,
+      budget: 350,
+      groceryStore: 'Metro Avenue du Parc',
+      otherRestrictions: '',
+      lastExpense: 12,
     };
 
     //Check if the user already exists
@@ -41,6 +58,10 @@ function Register() {
       try {
         const docRef = await addDoc(collectionRef, data);
         localStorage.setItem('userID', docRef.id);
+
+        //Initialize data
+        initalizeUserData(docRef.id);
+
         navigate('/home');
       } catch (error) {
         console.log(error);
