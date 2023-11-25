@@ -124,19 +124,22 @@ function Home() {
   return (
     <React.Fragment>
       <Navigation />
+
       <div className={styles['flex-container']}>
         <div className={styles['item-container-center']}>
           <Row className='mb-3 justify-content-center'>
-            <Col lg={7} className='text-center'>
+            <Col lg={1}></Col>
+            <Col md={7} lg={7} className='text-center'>
               <h3>{month}'s food budget : </h3>
             </Col>
-            <Col lg={3} className='text-center'>
+            <Col xs={3} md={4} lg={3} className='text-center'>
               <Form.Control
                 type='number'
                 value={budget}
                 onChange={handleBudgetChange}
               />
             </Col>
+            <Col lg={1}></Col>
           </Row>
 
           <div className={styles['progress-container']}>

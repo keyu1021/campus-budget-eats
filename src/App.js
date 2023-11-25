@@ -11,28 +11,6 @@ import FindRecipe from "./components/FindRecipe";
 import Favorites from "./components/Favorites";
 
 function App() {
-  useEffect(() => {
-    const isUserDataSet = localStorage.getItem("username") !== null;
-
-    if (!isUserDataSet) {
-      console.log("Setting initial data");
-      // Set initial data in local storage
-      localStorage.setItem("username", "testName");
-      localStorage.setItem("password", "testPassword");
-      localStorage.setItem("budget", 350);
-      localStorage.setItem("groceryStore", "Metro Avenue du Parc");
-      localStorage.setItem("isVegetarian", true);
-      localStorage.setItem("isPescatarian", false);
-      localStorage.setItem("isVegan", false);
-      localStorage.setItem("isGlutenFree", false);
-      localStorage.setItem("isLactoseFree", false);
-      localStorage.setItem("isKeto", false);
-      localStorage.setItem("isKosher", false);
-      localStorage.setItem("isHalal", false);
-      localStorage.setItem("otherRestrictions", "");
-    }
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
