@@ -156,10 +156,10 @@ function Expenses(props) {
   return (
     <React.Fragment>
       <Row className='d-flex align-items-center mb-3'>
-        <Col>
+        <Col lg={9} xs={7}>
           <h3>Monthly expenses</h3>
         </Col>
-        <Col lg={2}>
+        <Col lg={2} xs={3}>
           <PriceSort
             sortDateMostRecent={sortDateMostRecent}
             sortDateOldest={sortDateOldest}
@@ -167,8 +167,8 @@ function Expenses(props) {
             sortPriceLowest={sortPriceLowest}
           />
         </Col>
-        <Col lg={1}>
-          <IconContext.Provider value={{ style: { cursor: 'pointer' } }}>
+        <Col lg={1} xs={1}>
+          <IconContext.Provider value={{ style: { cursor: 'pointer', } }}>
             <GrAddCircle onClick={handleShow} />
           </IconContext.Provider>
         </Col>

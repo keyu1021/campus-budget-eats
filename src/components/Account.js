@@ -180,14 +180,14 @@ function Account() {
       <Navigation />
       <Container>
         <Row className='mt-5'>
-          <Col lg={3}>
+          <Col xs={3} lg={3}>
             <Image
               src={accountLogo}
               style={{ width: '100%', height: 'auto' }}
               roundedCircle
             />
           </Col>
-          <Col lg={9}>
+          <Col lg={9} xs={12}>
             <h1>Welcome {username}!</h1>
 
             <Form.Group className='mb-3' controlId='formGroceryStore'>

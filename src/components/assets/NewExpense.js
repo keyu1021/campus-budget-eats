@@ -12,11 +12,11 @@ function NewExpense(props) {
   const [price, setPrice] = useState('');
 
   const addExpense = () => {
-    setName('')
-    setDate('')
-    setPrice('')
-    props.addNewExpense(name, date, parseInt(price))
-  }
+    setName('');
+    setDate('');
+    setPrice('');
+    props.addNewExpense(name, date, parseFloat(price));
+  };
 
   return (
     <Modal show={props.show} onHide={props.handleClose}>
@@ -30,7 +30,12 @@ function NewExpense(props) {
               Name
             </Form.Label>
             <Col sm='10'>
-              <Form.Control value={name} onChange={(e) => setName(e.target.value)} type='text' placeholder='Expense name' />
+              <Form.Control
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type='text'
+                placeholder='Expense name'
+              />
             </Col>
           </Form.Group>
 
@@ -39,7 +44,12 @@ function NewExpense(props) {
               Date
             </Form.Label>
             <Col sm='10'>
-              <Form.Control value={date} onChange={(e) => setDate(e.target.value)} type='date' placeholder='Date' />
+              <Form.Control
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                type='date'
+                placeholder='Date'
+              />
             </Col>
           </Form.Group>
 
@@ -48,7 +58,13 @@ function NewExpense(props) {
               Price
             </Form.Label>
             <Col sm='10'>
-              <Form.Control value={price} onChange={(e) => setPrice(e.target.value)} type='number' placeholder='Price ($)' />
+              <Form.Control
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                type='number'
+                setp='any'
+                placeholder='Price ($)'
+              />
             </Col>
           </Form.Group>
         </Form>
