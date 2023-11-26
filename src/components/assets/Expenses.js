@@ -1,17 +1,49 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import { Row, Col } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
+import { IconContext } from 'react-icons';
+import { GrSubtractCircle } from 'react-icons/gr';
+import { doc, getDoc, updateDoc, deleteField } from '@firebase/firestore';
 
 import PriceSort from './PriceSort';
-import ExpenseData from '../data/ExpenseData';
 import NewExpense from './NewExpense';
+import { db } from '../../firebase';
 
 import styles from '../../styles/Expenses.module.css';
 
 function Expenses(props) {
-  // Data management
-  const [data, setData] = useState(ExpenseData);
+  const [document, setDocument] = useState(localStorage.getItem('userID'));
+  const [data, setData] = useState([]);
+
+  //Initialize expenses
+  useEffect(() => {
+    const fetchData = async () => {
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth(); 
+      try {
+        const docRefExpenses = doc(db, 'userExpenses', document);
+        const docSnapExpenses = await getDoc(docRefExpenses);
+
+        const keys = Object.keys(docSnapExpenses.data());
+        const dataArray = [];
+        keys.forEach((k) => {
+          const expenseData = docSnapExpenses.data()[k];
+          expenseData.id = k;
+          
+          const dateObject = new Date(expenseData.date);
+          if (dateObject.getMonth() === currentMonth){
+            dataArray.push(expenseData);
+          }
+        });
+        setData(dataArray);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   // Sorting
   const sortDateMostRecent = () => {
@@ -47,14 +79,43 @@ function Expenses(props) {
   };
 
   // Adding new expense
-  const addNewExpense = (newName, newDate, newPrice) => {
+  const addNewExpense = async (newName, newDate, newPrice) => {
     const newExpense = {
       name: newName,
       date: newDate,
       price: newPrice,
     };
 
-    setData((prevData) => [...prevData, newExpense]); // Use the previous state to calculate the new state
+    setData((prevData) => [...prevData, newExpense]);
+
+    //Get the last expense id
+    var lastExpenseID = -1;
+    try {
+      const docRef = doc(db, 'users', document);
+      const docSnap = await getDoc(docRef);
+      lastExpenseID = docSnap.data().lastExpense;
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (lastExpenseID !== -1) {
+      const updateField = lastExpenseID + 1;
+      const newValue = { name: newName, date: newDate, price: newPrice };
+      const updateFieldLast = 'lastExpense';
+      const newValueLast = lastExpenseID + 1;
+      try {
+        //Add next expense
+        const docRefExpenses = doc(db, 'userExpenses', document);
+        await updateDoc(docRefExpenses, { [updateField]: newValue });
+
+        //Update last expense id
+        const docRef = doc(db, 'users', document);
+        await updateDoc(docRef, { [updateFieldLast]: newValueLast });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     handleClose();
 
     var calcTotal = 0;
@@ -62,6 +123,19 @@ function Expenses(props) {
       calcTotal += element.price;
     });
     props.updateTotal(calcTotal);
+  };
+
+  const deleteExpense = async (id) => {
+    //Delete from database
+    try {
+      const docRefExpenses = doc(db, 'userExpenses', document);
+      await updateDoc(docRefExpenses, { [id]: deleteField() });
+    } catch (error) {
+      console.log(error);
+    }
+
+    //Update state
+    setData((prevData) => prevData.filter((expense) => expense.id !== id));
   };
 
   useEffect(() => {
@@ -81,23 +155,36 @@ function Expenses(props) {
 
   return (
     <React.Fragment>
-      <PriceSort
-        sortDateMostRecent={sortDateMostRecent}
-        sortDateOldest={sortDateOldest}
-        sortPriceHighest={sortPriceHighest}
-        sortPriceLowest={sortPriceLowest}
-      />
-      <GrAddCircle onClick={handleShow} />
-      <NewExpense
-        show={show}
-        handleClose={handleClose}
-        handleShow={handleShow}
-        addNewExpense={addNewExpense}
-      />
+      <Row className='d-flex align-items-center mb-3'>
+        <Col lg={9} xs={7}>
+          <h3>Monthly expenses</h3>
+        </Col>
+        <Col lg={2} xs={3}>
+          <PriceSort
+            sortDateMostRecent={sortDateMostRecent}
+            sortDateOldest={sortDateOldest}
+            sortPriceHighest={sortPriceHighest}
+            sortPriceLowest={sortPriceLowest}
+          />
+        </Col>
+        <Col lg={1} xs={1}>
+          <IconContext.Provider value={{ style: { cursor: 'pointer', } }}>
+            <GrAddCircle onClick={handleShow} />
+          </IconContext.Provider>
+        </Col>
+        <NewExpense
+          show={show}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          addNewExpense={addNewExpense}
+        />
+      </Row>
+
       <div className={styles['table-container']}>
-        <Table>
+        <Table className='mt-1' bordered>
           <thead>
             <tr>
+              <th></th>
               <th>Expense</th>
               <th>Date</th>
               <th>Price ($)</th>
@@ -107,9 +194,25 @@ function Expenses(props) {
             {data.map((val, key) => {
               return (
                 <tr key={key}>
+                  <td>
+                    <IconContext.Provider
+                      value={{
+                        style: {
+                          cursor: 'pointer',
+                          marginLeft: '5px',
+                        },
+                      }}
+                    >
+                      <GrSubtractCircle
+                        onClick={() => {
+                          deleteExpense(val.id);
+                        }}
+                      />
+                    </IconContext.Provider>
+                  </td>
                   <td>{val.name}</td>
                   <td>{val.date}</td>
-                  <td>{val.price}</td>
+                  <td>{val.price.toFixed(2)} </td>
                 </tr>
               );
             })}
