@@ -1,24 +1,26 @@
 * {
-    font-family: 'Gupter', serif;
-} 
-
-.item-container-center{
-    width:50%;
-    height: 100%;
-    margin: 100px;
-    text-align: center;
+  font-family: "Gupter", serif;
+  font-size: large;
 }
 
-.item-container-left{
-    width:50%;
-    height: 100%;
-    margin: 100px;
-    text-align: left;
+
+.item-container-center {
+  width: 50%;
+  height: 100%;
+  margin: 100px;
+  text-align: center;
 }
 
-.flex-container{
-    display: flex;
-    flex-direction: row;
+.item-container-left {
+  width: 50%;
+  height: 100%;
+  margin: 100px;
+  text-align: left;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
 }
 
 .progress-container{
@@ -45,4 +47,3 @@
         text-align: left;
     }
 }
-

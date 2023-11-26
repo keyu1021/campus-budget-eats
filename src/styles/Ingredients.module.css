@@ -42,7 +42,7 @@
   /* Ensure text content does not expand the box */
   text-align: center;
   overflow: hidden;
-  font-size: medium;
+  font-size: large;
   white-space: nowrap;
   text-overflow: ellipsis;
   font-weight: bold;
@@ -104,6 +104,9 @@
   width: 100%;
   padding: 5px;
   font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
 }
 
 /* ... existing styles ... */
