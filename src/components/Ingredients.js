@@ -1,81 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Ingredients.module.css";
 import Navigation from "./assets/Navigation";
 import { useNavigate } from "react-router-dom";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 
 //import "../styles/Ingredients.css";
 
 const ingredientsData = [
-  {
-    category: "Protein",
-    name: "Chicken",
-    price: "9.99",
-    unit: "lb",
-    icon: "./icons/chicken.png",
-  },
-  {
-    category: "Protein",
-    name: "Short Ribs",
-    price: "12.59",
-    unit: "lb",
-    icon: "./icons/ribs.png",
-  },
-  {
-    category: "Protein",
-    name: "Steak",
-    price: "14.59",
-    unit: "lb",
-    icon: "./icons/steak.png",
-  },
-  {
-    category: "Vegetables",
-    name: "Broccoli",
-    price: "3.49",
-    unit: "ea",
-    icon: "./icons/broccoli.png",
-  },
-  {
-    category: "Vegetables",
-    name: "Cabbage",
-    price: "1.99",
-    unit: "lb",
-    icon: "./icons/cabbage.png",
-  },
-  {
-    category: "Vegetables",
-    name: "Carrot",
-    price: "3.99",
-    unit: "ea",
-    icon: "./icons/carrot.png",
-  },
-  {
-    category: "Carbohydrates",
-    name: "Rice",
-    price: "4.59",
-    unit: "lb",
-    icon: "./icons/rice.png",
-  },
-  {
-    category: "Carbohydrates",
-    name: "Pasta",
-    price: "2.49",
-    unit: "ea",
-    icon: "./icons/pasta.png",
-  },
-  {
-    category: "Carbohydrates",
-    name: "Bread",
-    price: "2.50",
-    unit: "ea",
-    icon: "./icons/bread.png",
-  },
-  {
-    category: "Protein",
-    name: "Egg",
-    price: "3.99",
-    unit: "ea",
-    icon: "./icons/egg.png",
-  },
   {
     category: "Protein",
     name: "Tofu",
@@ -113,42 +44,132 @@ const ingredientsData = [
   },
 ];
 
-const Ingredient = ({ name, price, unit, icon }) => (
-  <div className={styles.ingredient}>
-    <img src={icon} className={styles.ingredientIcon} />
-    <div className={styles.ingredientName}>{name}</div>
-    <div className={styles.ingredientPrice}>
-      ${price}/{unit}
+const Ingredient = ({ id, name, price, unit, icon, isSelected, onToggle }) => {
+  // Define a click handler for the ingredient box
+  const handleClick = () => {
+    onToggle(id);
+  };
+
+  return (
+    <div
+      className={`${styles.ingredient} ${isSelected ? styles.selected : ""}`}
+      onClick={handleClick}
+    >
+      <img src={icon} alt={name} className={styles.ingredientIcon} />
+      <div className={styles.ingredientName}>{name}</div>
+      <div className={styles.ingredientPrice}>
+        ${price}/{unit}
+      </div>
+      {/* The checkbox can be hidden if not needed */}
+      <input
+        type="checkbox"
+        checked={isSelected}
+        onChange={() => {}}
+        className={styles.hiddenCheckbox}
+      />
     </div>
-  </div>
-);
+  );
+};
 
 const Ingredients = () => {
+  const [ingredients, setIngredients] = useState([]);
+  const [selectedIngredients, setSelectedIngredients] = useState(new Set());
+  const [filterCategory, setFilterCategory] = useState("All");
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const db = getFirestore();
+
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "ingredients"));
+        const fetchedIngredients = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setIngredients(fetchedIngredients);
+
+        // Extract and set categories after fetching ingredients
+        const fetchedCategories = new Set(
+          fetchedIngredients.map((ing) => ing.category)
+        );
+        setCategories(Array.from(fetchedCategories));
+        console.log("Categories:", Array.from(fetchedCategories)); // Debugging
+      } catch (error) {
+        console.error("Error fetching ingredients:", error);
+      }
+    };
+
+    fetchIngredients();
+  }, [db]);
+
+  const handleIngredientSelection = (ingredientId) => {
+    setSelectedIngredients((prevSelected) => {
+      const newSelected = new Set(prevSelected);
+      if (newSelected.has(ingredientId)) {
+        newSelected.delete(ingredientId);
+      } else {
+        newSelected.add(ingredientId);
+      }
+      return newSelected;
+    });
+  };
+
+  const saveSelectedIngredients = async () => {
+    // Replace the following console.log with your logic to save to the database
+    console.log("Selected Ingredients:", Array.from(selectedIngredients));
+  };
 
   const goToFindRecipe = () => {
-    navigate("/findrecipe"); // Navigate to the FindRecipe route
+    navigate("/findrecipe");
   };
+
+  // Only include ingredients that match the selected category,
+  // or include all if 'All' is selected
+  const displayedIngredients =
+    filterCategory === "All"
+      ? ingredients
+      : ingredients.filter(
+          (ingredient) => ingredient.category === filterCategory
+        );
 
   return (
     <React.Fragment>
       <Navigation />
       <div className={styles.ingredientsPage}>
         <h1 className={styles.ingredientsHeader}>Your Weekly Grocery Picks</h1>
-        <button className={styles.turnRecipesBtn} onClick={goToFindRecipe}>
-          Turn into Recipes
-        </button>
+        <p className={styles.instructions}>
+          Select the items you want and turn them into recipes.
+        </p>
+
+        <div className={styles.filterContainer}>
+          <select
+            className={styles.categoryFilter}
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+          >
+            <option value="All">All Categories</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className={styles.ingredientsContainer}>
-          {ingredientsData.map((ingredient, index) => (
+          {displayedIngredients.map((ingredient) => (
             <Ingredient
-              key={index} // It's important to provide a unique key for list items
-              name={ingredient.name}
-              price={ingredient.price}
-              unit={ingredient.unit}
-              icon={ingredient.icon}
+              key={ingredient.id}
+              {...ingredient}
+              isSelected={selectedIngredients.has(ingredient.id)}
+              onToggle={handleIngredientSelection}
             />
           ))}
         </div>
+        <button className={styles.saveButton} onClick={goToFindRecipe}>
+          Turn into Recipes
+        </button>
       </div>
     </React.Fragment>
   );

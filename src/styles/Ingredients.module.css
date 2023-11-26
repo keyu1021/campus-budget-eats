@@ -8,12 +8,56 @@
   margin-bottom: 20px;
   color: #333;
 }
-
 .ingredientsContainer {
+  /* Using grid layout for the ingredients list */
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
-  gap: 20px; /* Space between cards */
-  justify-items: center; /* Center cards horizontally */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  ); /* Reduced minmax value */
+  gap: 15px; /* Adjust the gap between items */
+  padding: 10px;
+}
+
+.ingredient {
+  /* Style for individual ingredient items */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px; /* Reduced padding */
+  border-radius: 8px;
+  height: 200px; /* Reduced height */
+}
+
+.ingredientIcon {
+  /* Style for the ingredient image */
+  max-width: 60px; /* Reduced max width */
+  height: auto;
+  margin-bottom: 8px; /* Adjusted margin */
+}
+
+.ingredientName {
+  /* Ensure text content does not expand the box */
+  text-align: center;
+  overflow: hidden;
+  font-size: medium;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .ingredientsContainer {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .ingredient {
+    height: 180px;
+  }
+  .ingredientIcon {
+    max-width: 50px;
+  }
 }
 
 .ingredient {
@@ -30,37 +74,36 @@
   transform: translateY(-5px); /* Slight raise effect on hover */
 }
 
-.ingredientIcon {
-  max-width: 50px; /* Maximum width for the icon */
-  height: auto; /* Maintain aspect ratio */
-  margin-bottom: 10px; /* Space between icon and text */
-}
+.saveButton {
+  text-transform: uppercase; /* Uppercase text for the button */
 
-.ingredientName {
-  font-weight: bold;
-  margin-bottom: 5px; /* Space between name and price */
-}
-
-.ingredientPrice {
-  color: #555;
-  font-size: 0.9em;
-}
-
-.turnRecipesBtn {
-  display: block;
-  width: max-content;
-  padding: 10px 20px;
-  margin: 30px auto; /* Center button horizontally */
+  /* Style for the save button */
+  background-color: #3194fe;
   color: white;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  text-transform: uppercase; /* Uppercase text for the button */
-  font-weight: bold;
-  text-decoration: none;
-  background-color: rgb(214, 214, 214); /* Blue */
+  display: block;
+  width: 200px;
+  margin: 20px auto;
+  font-size: 1rem;
 }
 
-.turnRecipesBtn:hover {
-  background-color: rgb(186, 186, 186); /* Darker blue on hover */
+.saveButton:hover {
+  background-color: #0056b3;
 }
+.filterContainer {
+  position: fixed;
+  top: 100px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  width: 200px; /* Adjust as needed */
+}
+
+.categoryFilter {
+  width: 100%;
+  padding: 5px;
+  font-size: 1em;
+}
+
+/* ... existing styles ... */
