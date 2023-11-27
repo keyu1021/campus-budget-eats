@@ -3,12 +3,15 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Row, Col } from 'react-bootstrap';
 import { doc, getDoc, updateDoc } from '@firebase/firestore';
+import { GrFormEdit } from 'react-icons/gr';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 import Navigation from './assets/Navigation';
 import Form from 'react-bootstrap/Form';
 import Expenses from './assets/Expenses';
 import styles from '../styles/Home.module.css';
 import { db } from '../firebase';
+import { IconContext } from 'react-icons';
 
 function Home() {
   const [document, setDocument] = useState(localStorage.getItem('userID'));
@@ -18,6 +21,7 @@ function Home() {
   const [remaining, setRemaining] = useState(0);
   const [percentage, setPercentage] = useState(0);
   const [month, setMonth] = useState('');
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     //Load the budget and expenses from the database
@@ -121,6 +125,14 @@ function Home() {
     setRemaining(budget - total);
   }, [total, budget]);
 
+  const handleEditCLick = () => {
+    setEdit(true);
+  };
+
+  const handleSaveClick = () => {
+    setEdit(false);
+  };
+
   return (
     <React.Fragment>
       <Navigation />
@@ -128,18 +140,40 @@ function Home() {
       <div className={styles['flex-container']}>
         <div className={styles['item-container-center']}>
           <Row className='mb-3 justify-content-center'>
-            <Col lg={1}></Col>
-            <Col md={7} lg={7} className='text-center'>
+            <Col md={7} lg={8} className='text-center'>
               <h3>{month}'s food budget : </h3>
             </Col>
             <Col xs={3} md={4} lg={3} className='text-center'>
-              <Form.Control
-                type='number'
-                value={budget}
-                onChange={handleBudgetChange}
-              />
+              {!edit && (
+                <Form.Control
+                  type='number'
+                  value={budget}
+                  onChange={handleBudgetChange}
+                  disabled
+                  size='sm'
+                />
+              )}
+              {edit && (
+                <Form.Control
+                  type='number'
+                  value={budget}
+                  onChange={handleBudgetChange}
+                  size='sm'
+                />
+              )}
             </Col>
-            <Col lg={1}></Col>
+            <Col lg={1}>
+              {!edit && (
+                <IconContext.Provider value={{ style: { cursor: 'pointer' } }}>
+                  <GrFormEdit onClick={handleEditCLick} />
+                </IconContext.Provider>
+              )}
+              {edit && (
+                <IconContext.Provider value={{ style: { cursor: 'pointer' } }}>
+                  <RiCheckboxCircleLine onClick={handleSaveClick}/>
+                </IconContext.Provider>
+              )}
+            </Col>
           </Row>
 
           <div className={styles['progress-container']}>
