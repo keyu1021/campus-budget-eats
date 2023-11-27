@@ -6,6 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
+import { GrFormEdit } from 'react-icons/gr';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
+import { IconContext } from 'react-icons';
 
 import Navigation from './assets/Navigation';
 import accountLogo from '../images/account-logo.png';
@@ -24,6 +27,7 @@ function Account() {
   const [isKeto, setIsKeto] = useState(false);
   const [isKosher, setIsKosher] = useState(false);
   const [isHalal, setIsHalal] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     //Load data from database
@@ -59,9 +63,9 @@ function Account() {
     setOtherRestrictions(e.target.value);
     const updateField = 'otherRestrictions';
     const newValue = e.target.value;
-    try{
+    try {
       const docRef = doc(db, 'users', document);
-      await updateDoc(docRef, {[updateField]: newValue})
+      await updateDoc(docRef, { [updateField]: newValue });
     } catch (error) {
       console.log(error);
     }
@@ -71,9 +75,9 @@ function Account() {
     setGroceryStore(e.target.value);
     const updateField = 'groceryStore';
     const newValue = e.target.value;
-    try{
+    try {
       const docRef = doc(db, 'users', document);
-      await updateDoc(docRef, {[updateField]: newValue})
+      await updateDoc(docRef, { [updateField]: newValue });
     } catch (error) {
       console.log(error);
     }
@@ -175,6 +179,14 @@ function Account() {
     }
   };
 
+  const handleEditCLick = () => {
+    setEdit(true);
+  };
+
+  const handleSaveClick = () => {
+    setEdit(false);
+  };
+
   return (
     <React.Fragment>
       <Navigation />
@@ -187,20 +199,45 @@ function Account() {
               roundedCircle
             />
           </Col>
+
           <Col lg={9} xs={12}>
-            <h1>Welcome {username}!</h1>
+            <h1>
+              Welcome {username}!{' '}
+              {!edit && (
+                <IconContext.Provider value={{ style: { cursor: 'pointer' } }}>
+                  <GrFormEdit onClick={handleEditCLick} />
+                </IconContext.Provider>
+              )}
+              {edit && (
+                <IconContext.Provider value={{ style: { cursor: 'pointer' } }}>
+                  <RiCheckboxCircleLine onClick={handleSaveClick} />
+                </IconContext.Provider>
+              )}
+            </h1>
 
             <Form.Group className='mb-3' controlId='formGroceryStore'>
               <Form.Label column sm='2'>
                 Your grocery store:
               </Form.Label>
+
               <Col sm='10'>
-                <Form.Control
-                  value={groceryStore}
-                  onChange={handleGroceryStoreChange}
-                  type='text'
-                  placeholder='Your grocery store'
-                />
+                {!edit && (
+                  <Form.Control
+                    value={groceryStore}
+                    onChange={handleGroceryStoreChange}
+                    type='text'
+                    placeholder='Your grocery store'
+                    disabled
+                  />
+                )}
+                {edit && (
+                  <Form.Control
+                    value={groceryStore}
+                    onChange={handleGroceryStoreChange}
+                    type='text'
+                    placeholder='Your grocery store'
+                  />
+                )}
               </Col>
             </Form.Group>
           </Col>
@@ -214,54 +251,142 @@ function Account() {
         <Row>
           <Col lg={12}>
             <Form>
-              <Form.Check
-                inline
-                label='Vegetarian'
-                checked={isVegetarian}
-                onChange={handleIsVegetarianChange}
-              />
-              <Form.Check
-                inline
-                label='Pescatarian'
-                checked={isPescatarian}
-                onChange={handleIsPescatarianChange}
-              />
-              <Form.Check
-                inline
-                label='Vegan'
-                checked={isVegan}
-                onChange={handleIsVeganChange}
-              />
-              <Form.Check
-                inline
-                label='Gluten-free'
-                checked={isGlutenFree}
-                onChange={handleIsGlutenFreeChange}
-              />
-              <Form.Check
-                inline
-                label='Lactose-free'
-                checked={isLactoseFree}
-                onChange={handleIsLactoseFreeChange}
-              />
-              <Form.Check
-                inline
-                label='Keto'
-                checked={isKeto}
-                onChange={handleIsKetoChange}
-              />
-              <Form.Check
-                inline
-                label='Kosher'
-                checked={isKosher}
-                onChange={handleIsKosherChange}
-              />
-              <Form.Check
-                inline
-                label='Halal'
-                checked={isHalal}
-                onChange={handleIsHalalChange}
-              />
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Vegetarian'
+                  checked={isVegetarian}
+                  onChange={handleIsVegetarianChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Vegetarian'
+                  checked={isVegetarian}
+                  onChange={handleIsVegetarianChange}
+                />
+              )}
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Pescatarian'
+                  checked={isPescatarian}
+                  onChange={handleIsPescatarianChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Pescatarian'
+                  checked={isPescatarian}
+                  onChange={handleIsPescatarianChange}
+                />
+              )}
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Vegan'
+                  checked={isVegan}
+                  onChange={handleIsVeganChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Vegan'
+                  checked={isVegan}
+                  onChange={handleIsVeganChange}
+                />
+              )}
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Gluten-free'
+                  checked={isGlutenFree}
+                  onChange={handleIsGlutenFreeChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Gluten-free'
+                  checked={isGlutenFree}
+                  onChange={handleIsGlutenFreeChange}
+                />
+              )}
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Lactose-free'
+                  checked={isLactoseFree}
+                  onChange={handleIsLactoseFreeChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Lactose-free'
+                  checked={isLactoseFree}
+                  onChange={handleIsLactoseFreeChange}
+                />
+              )}
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Keto'
+                  checked={isKeto}
+                  onChange={handleIsKetoChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Keto'
+                  checked={isKeto}
+                  onChange={handleIsKetoChange}
+                />
+              )}
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Kosher'
+                  checked={isKosher}
+                  onChange={handleIsKosherChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Kosher'
+                  checked={isKosher}
+                  onChange={handleIsKosherChange}
+                />
+              )}
+              {!edit && (
+                <Form.Check
+                  inline
+                  label='Halal'
+                  checked={isHalal}
+                  onChange={handleIsHalalChange}
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Check
+                  inline
+                  label='Halal'
+                  checked={isHalal}
+                  onChange={handleIsHalalChange}
+                />
+              )}
             </Form>
           </Col>
         </Row>
@@ -271,12 +396,23 @@ function Account() {
               Other:
             </Form.Label>
             <Col sm='10'>
-              <Form.Control
-                type='text'
-                value={otherRestrictions}
-                onChange={handleOtherRestrictionChange}
-                placeholder='Other dietary restrictions'
-              />
+              {!edit && (
+                <Form.Control
+                  type='text'
+                  value={otherRestrictions}
+                  onChange={handleOtherRestrictionChange}
+                  placeholder='Other dietary restrictions'
+                  disabled
+                />
+              )}
+              {edit && (
+                <Form.Control
+                  type='text'
+                  value={otherRestrictions}
+                  onChange={handleOtherRestrictionChange}
+                  placeholder='Other dietary restrictions'
+                />
+              )}
             </Col>
           </Form.Group>
         </Row>
