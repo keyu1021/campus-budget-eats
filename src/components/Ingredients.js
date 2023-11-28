@@ -6,43 +6,43 @@ import { collection, getDocs, getFirestore } from "firebase/firestore";
 
 //import "../styles/Ingredients.css";
 
-const ingredientsData = [
-  {
-    category: "Protein",
-    name: "Tofu",
-    price: "1.99",
-    unit: "ea",
-    icon: "./icons/tofu.png",
-  },
-  {
-    category: "Vegetables",
-    name: "Onion",
-    price: "2.49",
-    unit: "lb",
-    icon: "./icons/onion.png",
-  },
-  {
-    category: "Vegetables",
-    name: "Cherry Tomato",
-    price: "4.49",
-    unit: "lb",
-    icon: "./icons/cherrytomato.png",
-  },
-  {
-    category: "Protein",
-    name: "Bacon",
-    price: "4.49",
-    unit: "lb",
-    icon: "./icons/bacon.png",
-  },
-  {
-    category: "Protein",
-    name: "Cheese",
-    price: "7.49",
-    unit: "ea",
-    icon: "./icons/cheese.png",
-  },
-];
+// const ingredientsData = [
+//   {
+//     category: "Protein",
+//     name: "Tofu",
+//     price: "1.99",
+//     unit: "ea",
+//     icon: "./icons/tofu.png",
+//   },
+//   {
+//     category: "Vegetables",
+//     name: "Onion",
+//     price: "2.49",
+//     unit: "lb",
+//     icon: "./icons/onion.png",
+//   },
+//   {
+//     category: "Vegetables",
+//     name: "Cherry Tomato",
+//     price: "4.49",
+//     unit: "lb",
+//     icon: "./icons/cherrytomato.png",
+//   },
+//   {
+//     category: "Protein",
+//     name: "Bacon",
+//     price: "4.49",
+//     unit: "lb",
+//     icon: "./icons/bacon.png",
+//   },
+//   {
+//     category: "Protein",
+//     name: "Cheese",
+//     price: "7.49",
+//     unit: "ea",
+//     icon: "./icons/cheese.png",
+//   },
+// ];
 
 const Ingredient = ({ id, name, price, unit, icon, isSelected, onToggle }) => {
   // Define a click handler for the ingredient box
@@ -89,12 +89,17 @@ const Ingredients = () => {
         }));
         setIngredients(fetchedIngredients);
 
+        // Add all fetched ingredients to selectedIngredients
+        const allIngredientNames = new Set(
+          fetchedIngredients.map((ing) => ing.name)
+        );
+        setSelectedIngredients(allIngredientNames);
+
         // Extract and set categories after fetching ingredients
         const fetchedCategories = new Set(
           fetchedIngredients.map((ing) => ing.category)
         );
         setCategories(Array.from(fetchedCategories));
-        console.log("Categories:", Array.from(fetchedCategories)); // Debugging
       } catch (error) {
         console.error("Error fetching ingredients:", error);
       }
@@ -113,6 +118,10 @@ const Ingredients = () => {
       }
       return newSelected;
     });
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedIngredients(new Set());
   };
 
   const goToFindRecipe = () => {
@@ -142,8 +151,12 @@ const Ingredients = () => {
       <div className={styles.ingredientsPage}>
         <h1 className={styles.ingredientsHeader}>Your Weekly Grocery Picks</h1>
         <p className={styles.instructions}>
-          Select the items you want and turn them into recipes.
+          Select the ingredients you want and turn them into recipes:
         </p>
+
+        <button className={styles.deselectButton} onClick={handleDeselectAll}>
+          Deselect All
+        </button>
 
         <div className={styles.filterContainer}>
           <select

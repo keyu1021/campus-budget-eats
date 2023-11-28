@@ -3,10 +3,10 @@
   background: #f5f5f5;
 }
 
-.ingredientsHeader {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+.instructions {
+  padding: 15px;
+  background: #f5f5f5;
+  font-size: larger;
 }
 .ingredientsContainer {
   /* Using grid layout for the ingredients list */
@@ -109,4 +109,20 @@
   background-color: white;
 }
 
-/* ... existing styles ... */
+/* Ingredients.module.css */
+.deselectButton {
+  background-color: white; /* White background */
+  color: #333; /* Dark text for contrast */
+  border: 1px solid #ccc; /* Light border for definition */
+  padding: 8px 10px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+
+  /* Hover effect */
+  &:hover {
+    border-color: #999; /* Slightly darker border on hover */
+  }
+}
