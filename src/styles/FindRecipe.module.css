@@ -31,6 +31,13 @@
   background-color: white;
 }
 
+.sortBar {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
 .container {
   padding: 16px;
   display: flex;

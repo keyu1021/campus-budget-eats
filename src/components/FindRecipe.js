@@ -84,7 +84,7 @@ const recipes = [
       "Coconut milk",
       "Curry powder",
       "Tomatoes",
-      "Onion",
+      "Onions",
     ],
     imageUrl: "./images/chickpea-curry.jpg",
     price: "12.00",
@@ -99,7 +99,7 @@ const recipes = [
   {
     name: "Chicken and Rice",
     type: "Meat",
-    ingredients: ["Chicken Breast", "Rice", "Onion", "Garlic"],
+    ingredients: ["Chicken Breast", "Rice", "Onions", "Garlic"],
     imageUrl: "./images/chicken-and-rice.jpg",
     price: "9.00",
     instructions: [
@@ -111,7 +111,7 @@ const recipes = [
   {
     name: "Broccoli Cheddar Soup",
     type: "Vegetarian",
-    ingredients: ["Broccoli", "Cheese", "Onion", "Carrot", "Garlic"],
+    ingredients: ["Broccoli", "Cheese", "Onions", "Carrot", "Garlic"],
     imageUrl: "./images/broccoli-cheddar-soup.jpg",
     price: "8.50",
     instructions: [
@@ -198,9 +198,14 @@ function FindRecipe() {
   const selectedIngredients =
     JSON.parse(localStorage.getItem("selectedIngredients")) || [];
   console.log("in find recipe: Selected ingredients: ", selectedIngredients);
+  const [sortCriteria, setSortCriteria] = useState("");
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleSortChange = (event) => {
+    setSortCriteria(event.target.value);
   };
 
   const handleFilterChange = (event) => {
@@ -228,12 +233,23 @@ function FindRecipe() {
     });
   };
 
-  const filteredRecipes = recipes.filter(
-    (recipe) =>
-      recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filterType ? recipe.type === filterType : true) &&
-      containsSelectedIngredients(recipe)
-  );
+  const filteredRecipes = recipes
+    .filter(
+      (recipe) =>
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (filterType ? recipe.type === filterType : true) &&
+        containsSelectedIngredients(recipe)
+    )
+    .sort((a, b) => {
+      // Sorting logic here
+      if (sortCriteria === "priceLowToHigh") {
+        return parseFloat(a.price) - parseFloat(b.price);
+      } else if (sortCriteria === "priceHighToLow") {
+        return parseFloat(b.price) - parseFloat(a.price);
+      }
+      return 0;
+    });
+
   console.log("Filtered recipes: ", filteredRecipes);
 
   const toggleFavorite = (recipeName) => {
@@ -299,6 +315,17 @@ function FindRecipe() {
           <option value="Vegan">Vegan</option>
           <option value="Meat">Meat</option>
         </select>
+        <div>
+          <select
+            className={styles.sortBar}
+            value={sortCriteria}
+            onChange={handleSortChange}
+          >
+            <option value="">Sort by</option>
+            <option value="priceLowToHigh">Price: Low to High</option>
+            <option value="priceHighToLow">Price: High to Low</option>
+          </select>
+        </div>
       </div>
 
       <div className={styles.container}>
