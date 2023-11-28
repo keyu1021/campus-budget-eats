@@ -12,7 +12,7 @@
   justify-content: space-evenly;
   border: 1px solid #ddd;
   padding: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   border-radius: 4px;
 }
 
@@ -142,4 +142,48 @@
   background-color: #f3f4f6;
   text-decoration: none;
   transition-duration: 0.1s;
+}
+
+.checkboxLabel {
+  display: inline-block;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkboxLabel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.checkboxLabel::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  background-color: lightgray;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.checkboxInput:checked + .checkboxLabel::after {
+  opacity: 1;
+}
+
+/* findRecipe.module.css */
+.checkboxInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
 }

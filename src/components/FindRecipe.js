@@ -191,7 +191,7 @@ const recipes = [
 
 function FindRecipe() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("");
+  const [selectedTypes, setSelectedTypes] = useState(new Set());
   const [favorites, setFavorites] = useState(new Set()); // Using a Set for favorites
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null); // State to track the selected recipe
@@ -208,8 +208,16 @@ function FindRecipe() {
     setSortCriteria(event.target.value);
   };
 
-  const handleFilterChange = (event) => {
-    setFilterType(event.target.value);
+  const handleTypeChange = (type) => {
+    setSelectedTypes((prevTypes) => {
+      const newTypes = new Set(prevTypes);
+      if (newTypes.has(type)) {
+        newTypes.delete(type);
+      } else {
+        newTypes.add(type);
+      }
+      return newTypes;
+    });
   };
 
   const containsSelectedIngredients = (recipe) => {
@@ -236,12 +244,11 @@ function FindRecipe() {
   const filteredRecipes = recipes
     .filter(
       (recipe) =>
-        recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (filterType ? recipe.type === filterType : true) &&
-        containsSelectedIngredients(recipe)
+        (selectedTypes.size === 0 || selectedTypes.has(recipe.type)) &&
+        containsSelectedIngredients(recipe) &&
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) // Search by recipe name
     )
     .sort((a, b) => {
-      // Sorting logic here
       if (sortCriteria === "priceLowToHigh") {
         return parseFloat(a.price) - parseFloat(b.price);
       } else if (sortCriteria === "priceHighToLow") {
@@ -305,16 +312,6 @@ function FindRecipe() {
           onChange={handleSearch}
           className={styles.searchInput}
         />
-        <select
-          className={styles.filterDropdown}
-          value={filterType}
-          onChange={handleFilterChange}
-        >
-          <option value="">Filter by Type</option>
-          <option value="Vegetarian">Vegetarian</option>
-          <option value="Vegan">Vegan</option>
-          <option value="Meat">Meat</option>
-        </select>
         <div>
           <select
             className={styles.sortBar}
@@ -325,6 +322,25 @@ function FindRecipe() {
             <option value="priceLowToHigh">Price: Low to High</option>
             <option value="priceHighToLow">Price: High to Low</option>
           </select>
+        </div>
+        <div className={styles.typeFilters}>
+          {["Meat", "Vegetarian", "Vegan"].map((type) => (
+            <div key={type}>
+              <input
+                id={`checkbox-${type}`}
+                className={styles.checkboxInput}
+                type="checkbox"
+                checked={selectedTypes.has(type)}
+                onChange={() => handleTypeChange(type)}
+              />
+              <label
+                htmlFor={`checkbox-${type}`}
+                className={styles.checkboxLabel}
+              >
+                {type}
+              </label>
+            </div>
+          ))}
         </div>
       </div>
 
