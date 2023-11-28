@@ -8,7 +8,7 @@ const recipes = [
   {
     name: "Beef Stir Fry",
     type: "Meat",
-    ingredients: ["Beef", "Brocolli", "Soy sauce", "Garlic"],
+    ingredients: ["Beef", "Brocolli"],
     imageUrl: "./images/beef-stir-fry.jpg",
     price: "13.00",
     instructions: [
@@ -22,7 +22,7 @@ const recipes = [
   {
     name: "Cherry Tomato Pasta",
     type: "Vegetarian",
-    ingredients: ["Pasta", "Cherry tomatoes", "Garlic", "Olive oil", "Basil"],
+    ingredients: ["Pasta", "Cherry Tomatoes", "Garlic", "Olive oil", "Basil"],
     imageUrl: "./images/cherry-tomato-pasta.jpg",
     price: "15.00",
     instructions: [
@@ -52,8 +52,8 @@ const recipes = [
       "Chicken",
       "Rice",
       "Cucumbers",
-      "Tomatoes",
-      "Feta cheese",
+      "Cherry Tomato",
+      "Cheese",
       "Olives",
     ],
     imageUrl: "./images/greek-chicken-bowl.jpg",
@@ -96,6 +96,97 @@ const recipes = [
       "Serve hot over cooked rice.",
     ],
   },
+  {
+    name: "Chicken and Rice",
+    type: "Meat",
+    ingredients: ["Chicken Breast", "Rice", "Onion", "Garlic"],
+    imageUrl: "./images/chicken-and-rice.jpg",
+    price: "9.00",
+    instructions: [
+      "Cook rice as per instructions.",
+      "In another pan, sauté onion and garlic, then add chicken breast and cook until done.",
+      "Combine with rice and serve.",
+    ],
+  },
+  {
+    name: "Broccoli Cheddar Soup",
+    type: "Vegetarian",
+    ingredients: ["Broccoli", "Cheese", "Onion", "Carrot", "Garlic"],
+    imageUrl: "./images/broccoli-cheddar-soup.jpg",
+    price: "8.50",
+    instructions: [
+      "Sauté onion, carrot, and garlic until soft.",
+      "Add broccoli and cook until tender.",
+      "Blend until smooth, then add cheddar cheese and stir until melted.",
+    ],
+  },
+  {
+    name: "Lemon Herb Chicken",
+    type: "Meat",
+    ingredients: ["Chicken Breast", "Lemon", "Garlic", "Rosemary"],
+    imageUrl: "./images/lemon-herb-chicken.jpg",
+    price: "10.00",
+    instructions: [
+      "Marinate chicken breast in lemon juice, garlic, and rosemary.",
+      "Grill until cooked and golden.",
+      "Serve with a slice of lemon.",
+    ],
+  },
+  {
+    name: "Mushroom and Bell Pepper Omelette",
+    type: "Vegetarian",
+    ingredients: ["Eggs", "Mushrooms", "Bell Peppers", "Cheddar Cheese"],
+    imageUrl: "./images/mushroom-bellpepper-omelette.jpg",
+    price: "12.00",
+    instructions: [
+      "Whisk eggs and pour into a heated pan.",
+      "Add sliced mushrooms and bell peppers to the omelette.",
+      "Sprinkle cheddar cheese on top and fold the omelette.",
+    ],
+  },
+  {
+    name: "Pork Loin with Roasted Sweet Potato",
+    type: "Meat",
+    ingredients: ["Pork Loin", "Sweet Potato", "Rosemary", "Garlic"],
+    imageUrl: "./images/porkloin-sweetpotato.jpg",
+    price: "16.00",
+    instructions: [
+      "Season pork loin with rosemary and garlic, then roast until cooked.",
+      "Cube sweet potatoes and roast until tender.",
+      "Serve the pork loin with a side of roasted sweet potatoes.",
+    ],
+  },
+  {
+    name: "Steak and Mushroom Risotto",
+    type: "Meat",
+    ingredients: [
+      "Steak",
+      "Mushrooms",
+      "Arborio Rice",
+      "Onion",
+      "Parmesan Cheese",
+    ],
+    imageUrl: "./images/steak-mushroom-risotto.jpg",
+    price: "22.00",
+    instructions: [
+      "Cook diced onions and sliced mushrooms until soft.",
+      "Add arborio rice and gradually pour in stock, stirring continuously.",
+      "Grill steak separately and slice it.",
+      "Mix the steak slices into the risotto and sprinkle with Parmesan cheese.",
+    ],
+  },
+  {
+    name: "Asian-Style Beef Salad",
+    type: "Meat",
+    ingredients: ["Steak", "Spring Mix", "Soy Sauce", "Lime", "Sesame Oil"],
+    imageUrl: "./images/asian-beef-salad.jpg",
+    price: "18.00",
+    instructions: [
+      "Marinate steak in soy sauce, lime juice, and sesame oil.",
+      "Grill the steak and slice it thinly.",
+      "Toss mixed salad greens with the steak slices and additional soy-lime dressing.",
+    ],
+  },
 ];
 
 function FindRecipe() {
@@ -104,6 +195,9 @@ function FindRecipe() {
   const [favorites, setFavorites] = useState(new Set()); // Using a Set for favorites
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null); // State to track the selected recipe
+  const selectedIngredients =
+    JSON.parse(localStorage.getItem("selectedIngredients")) || [];
+  console.log("in find recipe: Selected ingredients: ", selectedIngredients);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -113,11 +207,34 @@ function FindRecipe() {
     setFilterType(event.target.value);
   };
 
+  const containsSelectedIngredients = (recipe) => {
+    // Print the ingredients of the current recipe
+    console.log(
+      "Recipe ingredients for " + recipe.name + ":",
+      recipe.ingredients
+    );
+
+    // Print the selected ingredients from local storage
+    console.log("Selected ingredients:", selectedIngredients);
+
+    // Check if any of the selected ingredients are in the recipe's ingredient list
+    return selectedIngredients.some((ingredient) => {
+      // Log each comparison
+      console.log(
+        "Checking if recipe contains:",
+        recipe.ingredients.includes(ingredient)
+      );
+      return recipe.ingredients.includes(ingredient);
+    });
+  };
+
   const filteredRecipes = recipes.filter(
     (recipe) =>
       recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filterType ? recipe.type === filterType : true)
+      (filterType ? recipe.type === filterType : true) &&
+      containsSelectedIngredients(recipe)
   );
+  console.log("Filtered recipes: ", filteredRecipes);
 
   const toggleFavorite = (recipeName) => {
     setFavorites((prevFavorites) => {

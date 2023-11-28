@@ -103,21 +103,16 @@ const Ingredients = () => {
     fetchIngredients();
   }, [db]);
 
-  const handleIngredientSelection = (ingredientId) => {
+  const handleIngredientSelection = (ingredientName) => {
     setSelectedIngredients((prevSelected) => {
       const newSelected = new Set(prevSelected);
-      if (newSelected.has(ingredientId)) {
-        newSelected.delete(ingredientId);
+      if (newSelected.has(ingredientName)) {
+        newSelected.delete(ingredientName);
       } else {
-        newSelected.add(ingredientId);
+        newSelected.add(ingredientName);
       }
       return newSelected;
     });
-  };
-
-  const saveSelectedIngredients = async () => {
-    // Replace the following console.log with your logic to save to the database
-    console.log("Selected Ingredients:", Array.from(selectedIngredients));
   };
 
   const goToFindRecipe = () => {
@@ -132,6 +127,14 @@ const Ingredients = () => {
       : ingredients.filter(
           (ingredient) => ingredient.category === filterCategory
         );
+
+  useEffect(() => {
+    console.log("Selected Ingredients saves", selectedIngredients);
+    localStorage.setItem(
+      "selectedIngredients",
+      JSON.stringify(Array.from(selectedIngredients))
+    );
+  }, [selectedIngredients]);
 
   return (
     <React.Fragment>
@@ -162,11 +165,12 @@ const Ingredients = () => {
             <Ingredient
               key={ingredient.id}
               {...ingredient}
-              isSelected={selectedIngredients.has(ingredient.id)}
-              onToggle={handleIngredientSelection}
+              isSelected={selectedIngredients.has(ingredient.name)}
+              onToggle={() => handleIngredientSelection(ingredient.name)}
             />
           ))}
         </div>
+
         <button className={styles.saveButton} onClick={goToFindRecipe}>
           Turn into Recipes
         </button>
